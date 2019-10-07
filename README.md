@@ -1,8 +1,6 @@
 This repo contains a small UI project written in React. Unfortunately it has many errors and 
 outmoded coding practices, particularly in Launches.jsx, the components and the actions. The Layout, routing,
-stores and services are more up to date, so don't waste too much of your time on them (although
-feel free to give feedback or make fixes if you think significant improvements are possible and you want to take 
-the time — but they're not necessarily intended to be in scope of the challenge.)
+stores and services are more up to date (although feel free to give feedback in the form of commments or make fixes if you think significant improvements are possible and you want to take the time — but they're not necessarily intended to be in scope of the challenge.)
 
 The repo is designed to be simple to start and run with just npm and any recent version of node.
 It is built on webpack and uses the webpack development server, so all you should need to do is clone the
