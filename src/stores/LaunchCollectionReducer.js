@@ -5,7 +5,7 @@ const initialState = {
   fetching: false,
   activeLaunch: null,
   fetchingActiveLaunch: false,
-  activeLaunchData: {}
+  activeLaunchData: null
 };
 
 const actionHandlers = {
@@ -18,9 +18,27 @@ const actionHandlers = {
     ...state,
     fetching: false,
     launches: [...state.launches, ...action.payload.launches]
-  })
+  }),
 
-  
+  [ACTIONS.ACTIVATE_LAUNCH]: ({ state, action }) => ({
+    ...state,
+	fetchingActiveLaunch: true,
+	activeLaunch: action.payload.activeLaunch,
+	activeLaunchData: null
+  }),
+
+  [ACTIONS.RECEIVE_LAUNCH_DETAILS]: ({ state, action }) => ({
+    ...state,
+	fetchingActiveLaunch: false,
+	activeLaunchData: action.payload.activeLaunchData
+  }),
+
+  [ACTIONS.DEACTIVATE_LAUNCH]: ({ state, action }) => ({
+    ...state,
+	activeLaunch: null,
+	fetchingActiveLaunch: false,
+	activeLaunchData: null
+  })
 };
 
 export default (state = initialState, action) =>

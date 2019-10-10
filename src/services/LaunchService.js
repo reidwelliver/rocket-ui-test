@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {ACTIONS, receiveLaunches} from '../actions/Launches';
+import {ACTIONS, receiveLaunches, receiveLaunchDetails} from '../actions/Launches';
 
 const SERVICES_URL = 'https://api.spacexdata.com/v3';
 const ALL_LAUNCHES_URL = `${SERVICES_URL}/launches`;
@@ -21,16 +21,21 @@ const spacexDataService = store => next => action => {
 			}
 
 			api.get(ALL_LAUNCHES_URL).then(response => {
-				return next(receiveLaunches(response));
+				return next(receiveLaunches(response.data));
 			})
+
+			break;
 	
 
 		case ACTIONS.ACTIVATE_LAUNCH:
+			const {rocket_id} = action.payload.activeLaunch.rocket;
 
-			const launchRocketURL = `${ROCKET_INFO_URL}/`
+			const launchRocketURL = `${ROCKET_INFO_URL}/${rocket_id}`
 			api.get(launchRocketURL).then(response => {
-				return next(receiveLaunches(response));
+				return next(receiveLaunchDetails(response.data));
 			})
+
+			break;
 
 	}
 }

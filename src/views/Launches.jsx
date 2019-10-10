@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ConnectedView from './ConnectedView';
-import {requestLaunches} from "../actions/Launches";
+import {requestLaunches, activateLaunch, deactivateLaunch} from "../actions/Launches";
 import Launch from '../components/Launch';
+import LaunchDetails from '../components/LaunchDetails';
 
 class LaunchesView extends Component {
   componentDidMount() {
@@ -11,31 +12,49 @@ class LaunchesView extends Component {
   }
 
   getContent() {
-    const { launchCollection } = this.props;
+	const { launchCollection, dispatch } = this.props;
+	const {	activeLaunch, launches, fetching, fetchingActiveLaunch, activeLaunchData } = launchCollection;
 
-    if (!launchCollection || launchCollection.fetching) {
+    if (!launchCollection || fetching) {
       return <div> LOADING </div>;
     }
 
-    if (!launchCollection.launches.length) {
+    if (!launches.length) {
       return <div> NO DATA </div>;
-    }
+	}
 
-    let launches = [];
 
-    for (let i = 0; i < launchCollection.launches.length; i++) {
-      const launch = launchCollection.launches[i];
+	const onLaunchActivate = (launch) => {
+		dispatch(activateLaunch(launch));
+	}
 
-      launches.push(
-        <Launch {...{
-          key: launch.launch_id,
-          launch
-        }} />
+	const onLaunchDeactivate = () => {
+		dispatch(deactivateLaunch());
+	}
 
-      )
-    }
+    let launchComponents = launches.map(launch => {
+		if(activeLaunch && activeLaunch.flight_number === launch.flight_number){
+			return (
+				<LaunchDetails {...{
+					key: launch.flight_number,
+					launch,
+					fetching: fetchingActiveLaunch,
+					details: activeLaunchData,
+					onClick: onLaunchDeactivate
+				}}/>
+			)
+		}
 
-    return <ul>{launches}</ul>;
+		return (
+			<Launch {...{
+				key: launch.flight_number,
+				launch,
+				onClick: onLaunchActivate
+			}} />
+		)
+	})
+
+    return <ul>{launchComponents}</ul>;
   }
 
   render() {
