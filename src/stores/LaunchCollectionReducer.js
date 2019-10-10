@@ -2,7 +2,10 @@ import { ACTIONS } from '../actions/Launches';
 
 const initialState = {
   launches: [],
-  fetching: false
+  fetching: false,
+  activeLaunch: null,
+  fetchingActiveLaunch: false,
+  activeLaunchData: {}
 };
 
 const actionHandlers = {
@@ -10,11 +13,14 @@ const actionHandlers = {
     ...state,
     fetching: true
   }),
+
   [ACTIONS.RECEIVE_LAUNCHES]: ({ state, action }) => ({
     ...state,
     fetching: false,
     launches: [...state.launches, ...action.payload.launches]
   })
+
+  
 };
 
 export default (state = initialState, action) =>

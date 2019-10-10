@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import ConnectedView from './ConnectedView';
-import {fetchLaunchesIfNeeded} from "../actions/Launches";
+import {requestLaunches} from "../actions/Launches";
 import Launch from '../components/Launch';
 
 class LaunchesView extends Component {
   componentDidMount() {
-    const { dispatch, launchesCollection } = this.props;
-    fetchLaunchesIfNeeded({ dispatch, launchesCollection });
+	const {dispatch} = this.props;
+
+    dispatch(requestLaunches())
   }
 
   getContent() {
