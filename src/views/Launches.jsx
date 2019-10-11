@@ -1,70 +1,39 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import ConnectedView from './ConnectedView';
-import {requestLaunches, activateLaunch, deactivateLaunch} from "../actions/Launches";
-import Launch from '../components/Launch';
-import LaunchDetails from '../components/LaunchDetails';
+import {requestLaunches} from "../actions/Launches";
+import LaunchLoadingError from '../components/LaunchLoadingError';
+import LaunchLoading from '../components/LaunchLoading';
+import LaunchGrid from '../components/LaunchGrid';
 
-class LaunchesView extends Component {
-  componentDidMount() {
-	const {dispatch} = this.props;
-
-    dispatch(requestLaunches())
-  }
-
-  getContent() {
-	const { launchCollection, dispatch } = this.props;
+function LaunchContent(props){
+	const { launchCollection, dispatch } = props;
 	const {	activeLaunch, launches, fetching, fetchingActiveLaunch, activeLaunchData } = launchCollection;
 
-    if (!launchCollection || fetching) {
-      return <div> LOADING </div>;
-    }
+	if (!launchCollection || fetching) return <LaunchLoading/>
 
-    if (!launches.length) {
-      return <div> NO DATA </div>;
-	}
-
-
-	const onLaunchActivate = (launch) => {
-		dispatch(activateLaunch(launch));
-	}
-
-	const onLaunchDeactivate = () => {
-		dispatch(deactivateLaunch());
-	}
-
-    let launchComponents = launches.map(launch => {
-		if(activeLaunch && activeLaunch.flight_number === launch.flight_number){
-			return (
-				<LaunchDetails {...{
-					key: launch.flight_number,
-					launch,
-					fetching: fetchingActiveLaunch,
-					details: activeLaunchData,
-					onClick: onLaunchDeactivate
-				}}/>
-			)
-		}
-
-		return (
-			<Launch {...{
-				key: launch.flight_number,
-				launch,
-				onClick: onLaunchActivate
-			}} />
-		)
-	})
-
-    return <div className="launch-grid">{launchComponents}</div>;
-  }
-
-  render() {
-    return (
-      <div>
-        <h2 className="title-header"> SpaceX launches </h2>
-        {this.getContent()}
-      </div>
-    );
-  }
+	if (!launches.length) return <LaunchLoadingError/>
+  
+	return <LaunchGrid {...{dispatch, activeLaunch, launches, fetchingActiveLaunch, activeLaunchData}}/>
 }
 
-export default ConnectedView(LaunchesView, 'launches');
+function VanillaLaunchesView(props){
+	const {dispatch} = props;
+
+	useEffect(() => {
+		dispatch(requestLaunches())
+	}, []);
+
+    return (
+		<div>
+		  <h2 className="title-header"> SpaceX launches</h2>
+		  <LaunchContent {...props}/>
+		</div>
+	);
+}
+
+const ConnectedLaunchesView = ConnectedView(VanillaLaunchesView, 'launches');
+
+export {
+	VanillaLaunchesView,
+	ConnectedLaunchesView as default
+}

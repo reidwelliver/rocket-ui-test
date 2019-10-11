@@ -15,28 +15,26 @@ const spacexDataService = store => next => action => {
 
 	switch (action.type){
 
-		case ACTIONS.REQUEST_LAUNCHES:
+		case ACTIONS.REQUEST_LAUNCHES: {
 			if(launches.length || fetching){
 				return //fetch not needed - already populated
 			}
 
-			api.get(ALL_LAUNCHES_URL).then(response => {
-				return next(receiveLaunches(response.data));
-			})
-
+			api.get(ALL_LAUNCHES_URL).then(response => next(receiveLaunches(response.data)) )
 			break;
-	
+		}
 
-		case ACTIONS.ACTIVATE_LAUNCH:
+		case ACTIONS.ACTIVATE_LAUNCH: {
 			const {rocket_id} = action.payload.activeLaunch.rocket;
-
 			const launchRocketURL = `${ROCKET_INFO_URL}/${rocket_id}`
-			api.get(launchRocketURL).then(response => {
-				return next(receiveLaunchDetails(response.data));
-			})
 
+			api.get(launchRocketURL).then( response => next(receiveLaunchDetails(response.data)) )
 			break;
+		}
 
+		default: {
+			break;
+		}
 	}
 }
 
