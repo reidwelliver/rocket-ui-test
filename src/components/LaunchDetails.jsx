@@ -11,6 +11,7 @@ function LaunchDetailContent(props){
 		return <div>Error Loading Launch Details</div>
 	}
 
+	const {launch_success} = props.launch;
 	const {cost_per_launch, rocket_id, description} = props.details;
 
 	const costPerLaunch = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cost_per_launch);
@@ -19,6 +20,7 @@ function LaunchDetailContent(props){
 		<div className="rocket-details">
 			<span>Rocket ID: {rocket_id}</span>
 			<span>Cost Per Launch: {costPerLaunch}</span>
+			<span>This Mission was a {launch_success ? 'Success': 'Failure'}.</span>
 			<span>{description}</span>
 		</div>
 	)
@@ -58,3 +60,4 @@ export default function LaunchDetails(props){
 		</div>
 	);
 }
+ 

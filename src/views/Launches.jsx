@@ -60,7 +60,7 @@ class LaunchesView extends Component {
   render() {
     return (
       <div>
-        <h2> SpaceX launches </h2>
+        <h2 className="title-header"> SpaceX launches </h2>
         {this.getContent()}
       </div>
     );
