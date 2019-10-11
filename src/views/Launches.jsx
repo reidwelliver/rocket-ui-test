@@ -54,7 +54,7 @@ class LaunchesView extends Component {
 		)
 	})
 
-    return <ul>{launchComponents}</ul>;
+    return <div className="launch-grid">{launchComponents}</div>;
   }
 
   render() {
